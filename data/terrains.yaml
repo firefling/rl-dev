@@ -1,0 +1,36 @@
+---
+- name: woods
+  glyph: '&'
+  symbol: t
+  color: 35
+- name: water
+  glyph: '='
+  symbol: r
+  color: 28
+- name: deep waters
+  glyph: '='
+  symbol: a
+  color: 18
+  bold: 1
+- name: mountains
+  glyph: '^'
+  symbol: m
+  color: 243
+  bold: 1
+- name: desert
+  glyph: '~'
+  symbol: d
+  color: 95
+- name: plains
+  glyph: '"'
+  symbol: p
+  color: 23
+- name: floor
+  glyph: '.'
+  symbol: f
+  color: 95
+  bold: 1
+- name: wall
+  glyph: '#'
+  symbol: w
+  color: 241

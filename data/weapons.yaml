@@ -1,0 +1,31 @@
+---
+- name: Dagger
+  type: d
+  damage: 3
+  magical_damage: 0
+  rank: 0
+  hotkey: a
+- name: Short sword
+  type: g
+  damage: 6
+  magical_damage: 0
+  rank: 0
+  hotkey: b
+- name: Long sword
+  type: l
+  damage: 8
+  magical_damage: 0
+  rank: 0
+  hotkey: c
+- name: Long sword + 1
+  type: l
+  damage: 8
+  magical_damage: 1
+  rank: 1
+  hotkey: d
+- name: Magical dagger + 2
+  type: d
+  damage: 3
+  magical_damage: 2
+  rank: 1
+  hotkey: e

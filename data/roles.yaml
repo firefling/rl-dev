@@ -1,0 +1,287 @@
+---
+- name: Archeologist
+  hotkey: a
+  races: hdg
+  genders: mf
+  alignments: ln
+  starting_attributes:
+    strength: 7
+    dexterity: 7
+    constitution: 7
+    intelligence: 10
+    wisdom: 10
+    charisma: 7
+  attribute_probabilities:
+    strength: 20
+    dexterity: 10
+    constitution: 20
+    intelligence: 20
+    wisdom: 20
+    charisma: 10
+  hitpoints: 11
+  power: 1
+  rand_power: 0
+- name: Barbarian
+  hotkey: b
+  races: ho
+  genders: mf
+  alignments: nc
+  starting_attributes:
+    strength: 16
+    dexterity: 15
+    constitution: 16
+    intelligence: 7
+    wisdom: 7
+    charisma: 6
+  attribute_probabilities:
+    strength: 30
+    dexterity: 20
+    constitution: 30
+    intelligence: 6
+    wisdom: 7
+    charisma: 7
+  hitpoints: 14
+  power: 1
+  rand_power: 0
+- name: Caveman
+  hotkey: c
+  races: hdg
+  genders: mf
+  alignments: ln
+  starting_attributes:
+    strength: 10
+    dexterity: 7
+    constitution: 8
+    intelligence: 7
+    wisdom: 7
+    charisma: 6
+  attribute_probabilities:
+    strength: 30
+    dexterity: 20
+    constitution: 30
+    intelligence: 6
+    wisdom: 7
+    charisma: 7
+  hitpoints: 14
+  power: 1
+  rand_power: 0
+- name: Healer
+  hotkey: h
+  races: hg
+  genders: mf
+  alignments: n
+  starting_attributes:
+    strength: 7
+    dexterity: 7
+    constitution: 11
+    intelligence: 7
+    wisdom: 13
+    charisma: 16
+  attribute_probabilities:
+    strength: 15
+    dexterity: 15
+    constitution: 25
+    intelligence: 20
+    wisdom: 20
+    charisma: 5
+  hitpoints: 11
+  power: 1
+  rand_power: 4
+- name: Knight
+  hotkey: k
+  races: h
+  genders: mf
+  alignments: l
+  starting_attributes:
+    strength: 13
+    dexterity: 8
+    constitution: 10
+    intelligence: 7
+    wisdom: 14
+    charisma: 17
+  attribute_probabilities:
+    strength: 30
+    dexterity: 10
+    constitution: 20
+    intelligence: 15
+    wisdom: 15
+    charisma: 10
+  hitpoints: 14
+  power: 1
+  rand_power: 4
+- name: Monk
+  hotkey: m
+  races: h
+  genders: mf
+  alignments: lnc
+  starting_attributes:
+    strength: 10
+    dexterity: 8
+    constitution: 7
+    intelligence: 7
+    wisdom: 8
+    charisma: 7
+  attribute_probabilities:
+    strength: 25
+    dexterity: 20
+    constitution: 15
+    intelligence: 10
+    wisdom: 20
+    charisma: 10
+  hitpoints: 12
+  power: 2
+  rand_power: 2
+- name: Priest
+  hotkey: p
+  races: he
+  genders: mf
+  alignments: lnc
+  starting_attributes:
+    strength: 7
+    dexterity: 7
+    constitution: 7
+    intelligence: 7
+    wisdom: 10
+    charisma: 7
+  attribute_probabilities:
+    strength: 15
+    dexterity: 15
+    constitution: 20
+    intelligence: 10
+    wisdom: 30
+    charisma: 10
+  hitpoints: 12
+  power: 4
+  rand_power: 3
+- name: Rogue
+  hotkey: r
+  races: ho
+  genders: mf
+  alignments: c
+  starting_attributes:
+    strength: 7
+    dexterity: 10
+    constitution: 7
+    intelligence: 7
+    wisdom: 7
+    charisma: 6
+  attribute_probabilities:
+    strength: 20
+    dexterity: 30
+    constitution: 20
+    intelligence: 10
+    wisdom: 10
+    charisma: 10
+  hitpoints: 10
+  power: 1
+  rand_power: 0
+- name: Ranger
+  hotkey: R
+  races: hego
+  genders: mf
+  alignments: nc
+  starting_attributes:
+    strength: 13
+    dexterity: 9
+    constitution: 13
+    intelligence: 13
+    wisdom: 13
+    charisma: 7
+  attribute_probabilities:
+    strength: 30
+    dexterity: 20
+    constitution: 20
+    intelligence: 10
+    wisdom: 10
+    charisma: 10
+  hitpoints: 13
+  power: 1
+  rand_power: 0
+- name: Samurai
+  hotkey: s
+  races: h
+  genders: mf
+  alignments: l
+  starting_attributes:
+    strength: 10
+    dexterity: 10
+    constitution: 17
+    intelligence: 8
+    wisdom: 7
+    charisma: 6
+  attribute_probabilities:
+    strength: 30
+    dexterity: 30
+    constitution: 14
+    intelligence: 10
+    wisdom: 8
+    charisma: 8
+  hitpoints: 13
+  power: 1
+  rand_power: 0
+- name: Tourist
+  hotkey: t
+  races: h
+  genders: mf
+  alignments: n
+  starting_attributes:
+    strength: 7
+    dexterity: 7
+    constitution: 7
+    intelligence: 10
+    wisdom: 6
+    charisma: 10
+  attribute_probabilities:
+    strength: 15
+    dexterity: 15
+    constitution: 30
+    intelligence: 10
+    wisdom: 10
+    charisma: 20
+  hitpoints: 8
+  power: 1
+  rand_power: 0
+- name: Valkyrie
+  hotkey: v
+  races: hd
+  genders: f
+  alignments: ln
+  starting_attributes:
+    strength: 10
+    dexterity: 7
+    constitution: 10
+    intelligence: 7
+    wisdom: 7
+    charisma: 7
+  attribute_probabilities:
+    strength: 30
+    dexterity: 20
+    constitution: 30
+    intelligence: 6
+    wisdom: 7
+    charisma: 7
+  hitpoints: 14
+  power: 1
+  rand_power: 0
+- name: Wizard
+  hotkey: w
+  races: hego
+  genders: mf
+  alignments: nc
+  starting_attributes:
+    strength: 7
+    dexterity: 7
+    constitution: 7
+    intelligence: 10
+    wisdom: 7
+    charisma: 7
+  attribute_probabilities:
+    strength: 10
+    dexterity: 20
+    constitution: 20
+    intelligence: 30
+    wisdom: 10
+    charisma: 10
+  hitpoints: 10
+  power: 4
+  rand_power: 3

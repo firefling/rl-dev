@@ -1,0 +1,5 @@
+---
+- name: world
+  file: loc1
+- name: room
+  file: loc2
