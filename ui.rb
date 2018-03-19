@@ -27,6 +27,12 @@ class UI
     addstr(string) # prints a string at cursor position
   end
 
+  def draw_player y, x, glyph, color=16, bold=false
+    attron(color_pair(color)|(bold ? A_BOLD : A_NORMAL)){
+      message(y, x, glyph)
+    }
+  end
+
   def vertical y, x, length, char='|'
     length.times do |i|
       message(i+y, x, char)

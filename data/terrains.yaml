@@ -3,34 +3,42 @@
   glyph: '&'
   symbol: t
   color: 35
+  walkable: true
 - name: water
   glyph: '='
   symbol: r
   color: 28
+  walkable: true
 - name: deep waters
   glyph: '='
   symbol: a
   color: 18
-  bold: 1
+  bold: true
+  walkable: false
 - name: mountains
   glyph: '^'
   symbol: m
   color: 243
-  bold: 1
+  bold: true
+  walkable: false
 - name: desert
   glyph: '~'
   symbol: d
   color: 95
+  walkable: true
 - name: plains
   glyph: '"'
   symbol: p
   color: 23
+  walkable: true
 - name: floor
   glyph: '.'
   symbol: f
   color: 95
-  bold: 1
+  bold: true
+  walkable: true
 - name: wall
   glyph: '#'
   symbol: w
   color: 241
+  walkable: false

@@ -2,7 +2,7 @@
 
 class Terrain
 
-  attr_reader :name, :glyph, :symbol, :color, :bold
+  attr_reader :name, :glyph, :symbol, :color, :bold, :walkable
 
   def initialize data
     data.each do |k, v|

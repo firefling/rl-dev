@@ -10,21 +10,28 @@ class PlayScreen
     @height = Curses.lines
     @horizontal_margin = 1
     @vertical_margin = 2
+    @map_box = MapBox.new(ui, map_box_y_offset, map_box_x_offset)
+    @msg_box = MessageBox.new(ui, msg_box_y_offset, msg_box_x_offset(map_box.width) , msg_box_width(map_box.width))
     # @maps = Maps.new
   end
 
   def render
-    map_box = MapBox.new(ui, map_box_y_offset, map_box_x_offset)
+    ui.clear
     map_box.render
-    map_box.load_map('world')
+    msg_box.render
+  end
 
-    message_box = MessageBox.new(ui, msg_box_y_offset, msg_box_x_offset(map_box.width) , msg_box_width(map_box.width))
-    message_box.render
+  def load_initial_map
+    load_map(options[:initial_map])
+  end
+
+  def load_map map=options[:current_map]
+    map_box.load_map(map)
   end
 
   private
 
-  attr_reader :ui, :options, :map_box_y_offset, :map_box_x_offset, :width, :height, :horizontal_margin, :vertical_margin
+  attr_reader :ui, :options, :map_box_y_offset, :map_box_x_offset, :width, :height, :horizontal_margin, :vertical_margin, :msg_box, :map_box
 
   def msg_box_x_offset map_box_width
     map_box_x_offset + map_box_width + 2 + vertical_margin
