@@ -3,9 +3,10 @@
 class Game
   def initialize
     @ui = UI.new
-    @options = { quit: false, randall: false, initial_map: 'world', initial_x: 0, initial_y: 0 }
-    @play_screen = PlayScreen.new(ui, options)
-    @player_controller = PlayerController.new(ui, options)
+    @options = { quit: false, randall: false, initial_x: 0, initial_y: 0 }
+    @maps = Maps.new
+    @options[:initial_map] = 'world'
+    @options[:current_map] = maps[options[:initial_map]].load
     at_exit { ui.close; pp options } # runs at program exit
   end
 
@@ -14,17 +15,34 @@ class Game
     setup_character
 #    character_screen
 
+    play_screen = MainScreen.new(ui, options)
     play_screen.render
-    play_screen.load_initial_map
-#    player_controller.render
-    ui.standby
+    play_screen.render_map
+    play_screen.render_player
+    while (ch = ui.user_input)
+      if (258..261).include?(ch)
+        play_screen.render_tile(options[:player].coordinates.y, options[:player].coordinates.x)
+        case ch
+        when 258
+          options[:player].coordinates.y += 1 if not options[:player].coordinates.y + 1 >= options[:current_map].height and options[:current_map].terrain_info(options[:player].coordinates.y + 1, options[:player].coordinates.x).walkable
+        when 259
+          options[:player].coordinates.y -= 1 if not options[:player].coordinates.y - 1 < 0 and options[:current_map].terrain_info(options[:player].coordinates.y - 1, options[:player].coordinates.x).walkable
+        when 260
+          options[:player].coordinates.x -= 1 if not options[:player].coordinates.x - 1 < 0 and options[:current_map].terrain_info(options[:player].coordinates.y, options[:player].coordinates.x - 1).walkable
+        when 261
+          options[:player].coordinates.x += 1 if not options[:player].coordinates.x + 1 >= options[:current_map].width and options[:current_map].terrain_info(options[:player].coordinates.y, options[:player].coordinates.x + 1).walkable
+        end
+        play_screen.render_player
+      end
+    end
+#    ui.standby
   end
 
   private
 
   TRAITS = [Role, Race, Gender, Alignment]
 
-  attr_reader :ui, :options, :play_screen, :player_controller
+  attr_reader :ui, :options, :play_screen, :player_controller, :maps
 
   def title_screen
     TitleScreen.new(ui, options).render

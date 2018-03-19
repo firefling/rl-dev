@@ -1,23 +1,7 @@
 #!/usr/bin/env ruby
 
 class Player
-  attr_reader :role, :race, :gender, :alignment, :attributes, :hitpoints, :max_hitpoints, :power, :max_power, :glyph, :color, :bold
-
-  @@glyph = '@'
-  @@color = 229
-  @@bold = true
-
-  def self.glyph
-    @@glyph
-  end
-
-  def self.color
-    @@color
-  end
-
-  def self.bold
-    @@bold
-  end
+  attr_reader :role, :race, :gender, :alignment, :attributes, :hitpoints, :max_hitpoints, :power, :max_power, :coordinates
 
   def initialize options
     @role = options[:role]
@@ -30,24 +14,23 @@ class Player
     @max_power = power
 
     @attributes = AttributeGenerator.new(role).attributes
+
+    @coordinates = Coordinates.new(22, 1)
   end
 end
 
-class PlayerController
-  def initialize ui, options
+class PlayerDisplay
+
+  def initialize ui
     @ui = ui
-    @options = options
-    @x = options[:player_x]
-    @y = options[:player_y]
+    @glyph = '@'
+    @color = 229
+    @bold = true
   end
 
-  # def player
-  #   options[:player]
-  # end
+  attr_reader :ui, :glyph, :color, :bold
 
-  attr_reader :ui, :options, :x, :y
-
-  def render
-    ui.draw_player(y, x, Player.glyph, Player.color, Player.bold)
+  def render y, x, yoffset=0, xoffset=0
+    ui.draw_player(y + yoffset, x + xoffset, glyph, color, bold)
   end
 end

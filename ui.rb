@@ -3,9 +3,13 @@
 class UI
   include Curses
 
+  attr_reader :win
+
   def initialize
     noecho # do not print characters the user types
     init_screen
+    @win = Window.new(0,0,0,0)
+    win.keypad = true
     start_color
     use_default_colors
     initialize_colors
@@ -16,19 +20,20 @@ class UI
   end
 
   def clear
-    super
+    win.clear #super
   end
 
   def message(y, x, string)
     x = x + cols if x < 0
     y = y + lines if y < 0
 
-    setpos(y, x) # place the cursor at our position
-    addstr(string) # prints a string at cursor position
+    win.setpos(y, x) # place the cursor at our position
+    win.addstr(string) # prints a string at cursor position
+    curs_set(0)
   end
 
   def draw_player y, x, glyph, color=16, bold=false
-    attron(color_pair(color)|(bold ? A_BOLD : A_NORMAL)){
+    win.attron(color_pair(color)|(bold ? A_BOLD : A_NORMAL)){
       message(y, x, glyph)
     }
   end
@@ -46,7 +51,7 @@ class UI
   end
 
   def rectangle y, x, width, height, color=8
-    attron(color_pair(color)){
+    win.attron(color_pair(color)){
       horizontal(y, x, width + 2)
       horizontal(y + height + 1, x, width + 2)
       vertical(y + 1, x, height)
@@ -79,33 +84,29 @@ class UI
     message(y, x, string + " ")
 
     loop do
-      choice = getch
+      choice = win.getch
       return choice if choices.include?(choice)
     end
   end
 
   def draw_terrain y, x, symbol, n=1, color=8, bold=false
     # color = Object.const_get('Curses::'+c)
-    attron(color_pair(color)|(bold ? A_BOLD : A_NORMAL)){
+    win.attron(color_pair(color)|(bold ? A_BOLD : A_NORMAL)){
       message(y, x, symbol*n)
     }
+  end
+
+  def user_input
+    win.getch
   end
 
   def initialize_colors
     colors.times do |i|
       init_pair(i + 1, i, -1)
     end
-    # init_pair(COLOR_CYAN,6,COLOR_BLACK)
-    # init_pair(COLOR_GREEN,2,COLOR_BLACK)
-    # init_pair(COLOR_YELLOW,3,COLOR_BLACK)
-    # init_pair(COLOR_BLUE,4,COLOR_BLACK)
-    # init_pair(COLOR_RED,1,COLOR_BLACK)
-    # init_pair(COLOR_WHITE,7,COLOR_BLACK)
-    # init_color(5, 0, 100, 100)
-    # init_pair(5,5,2)
   end
 
   def standby
-    getch
+    win.getch
   end
 end

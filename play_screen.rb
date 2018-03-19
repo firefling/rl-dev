@@ -1,37 +1,72 @@
 #!/usr/bin/env ruby
 
-class PlayScreen
+class MainScreen
   def initialize ui, options
     @ui = ui
     @options = options
+    @screen_layout = MainLayout.new
+    @map_display = MapDisplay.new(ui)
+    @player_display = PlayerDisplay.new(ui)
+  end
+
+  def render
+    ui.clear
+    render_map_box
+    render_msg_box
+  end
+
+  def render_map map=options[:current_map]
+    map_display.render(map.layout, screen_layout.map_box.width, screen_layout.map_box.height, map_yoffset, map_xoffset)
+  end
+
+  def render_tile y, x, map=options[:current_map]
+    map_display.render(map.get_tile(y, x), screen_layout.map_box.width, screen_layout.map_box.height, map_yoffset + y, map_xoffset + x)
+  end
+
+  def render_player
+    player_display.render(options[:player].coordinates.y, options[:player].coordinates.x, map_yoffset, map_xoffset)
+  end
+
+  private
+
+  attr_reader :ui, :options, :screen_layout, :map_display, :player_display
+
+  def render_map_box
+    ui.rectangle(screen_layout.map_box.yoffset, screen_layout.map_box.xoffset, screen_layout.map_box.width, screen_layout.map_box.height)
+  end
+
+  def render_msg_box
+    ui.message(screen_layout.msg_box.yoffset, screen_layout.msg_box.xoffset+2, 'MESSAGES')
+    ui.rectangle(screen_layout.msg_box.yoffset+1, screen_layout.msg_box.xoffset, screen_layout.msg_box.width, screen_layout.msg_box.height)
+  end
+
+  def map_yoffset
+    1 + screen_layout.map_box.yoffset
+  end
+
+  def map_xoffset
+    1 + screen_layout.map_box.xoffset
+  end
+end
+
+# TO STRUCT
+class MainLayout
+  def initialize
     @map_box_y_offset = 1
     @map_box_x_offset = 4
     @width = Curses.cols
     @height = Curses.lines
     @horizontal_margin = 1
     @vertical_margin = 2
-    @map_box = MapBox.new(ui, map_box_y_offset, map_box_x_offset)
-    @msg_box = MessageBox.new(ui, msg_box_y_offset, msg_box_x_offset(map_box.width) , msg_box_width(map_box.width))
-    # @maps = Maps.new
+    @map_box = MapBox.new(map_box_y_offset, map_box_x_offset)
+    @msg_box = MessageBox.new(msg_box_y_offset, msg_box_x_offset(map_box.width) , msg_box_width(map_box.width))
   end
 
-  def render
-    ui.clear
-    map_box.render
-    msg_box.render
-  end
-
-  def load_initial_map
-    load_map(options[:initial_map])
-  end
-
-  def load_map map=options[:current_map]
-    map_box.load_map(map)
-  end
+  attr_reader :width, :height, :msg_box, :map_box
 
   private
 
-  attr_reader :ui, :options, :map_box_y_offset, :map_box_x_offset, :width, :height, :horizontal_margin, :vertical_margin, :msg_box, :map_box
+  attr_reader :map_box_y_offset, :map_box_x_offset, :horizontal_margin, :vertical_margin
 
   def msg_box_x_offset map_box_width
     map_box_x_offset + map_box_width + 2 + vertical_margin
@@ -47,86 +82,26 @@ class PlayScreen
 
 end
 
-
+# TO STRUCT
 class MapBox
-  def initialize ui, yoffset=0, xoffset=0
-    @ui = ui
-    @maps = Maps.new
-    @map_loader = MapRenderer.new(ui)
+  def initialize yoffset=0, xoffset=0
     @width = 135
     @height = 40
     @yoffset = yoffset
     @xoffset = xoffset
   end
 
-  def render
-    ui.rectangle(yoffset, xoffset, width, height)
-  end
-
-  def load_map map_name
-    map = maps[map_name]
-    map_loader.render_map(map, width, height, yoffset + 1, xoffset + 1)
-  end
-
-  attr_reader :width, :height
-
-  private
-
-  attr_reader :ui, :maps, :map_loader, :yoffset, :xoffset
+  attr_reader :width, :height, :yoffset, :xoffset
 end
 
-
-class MapRenderer
-  def initialize ui
-    @ui = ui
-    @terrains = Terrains.new
-  end
-
-  def render_map map, box_width, box_height, y=0, x=0
-    yoffset = y
-    xoffset = x
-
-    # load map text
-    map_symbols = map.load
-    height = map_symbols.count("\n")
-    width = map_symbols.index("\n")
-
-    # centre map if needed
-    yoffset += (box_height - height) / 2 if height < box_height
-    xoffset += (box_width - width) / 2 if width < box_width
-
-    index = 0
-    for t in map_symbols.scan(/((.)\2*)/).map{ |m| [m[1], m[0].length] } #.each_with_index do |t, i|
-      next if t[0] == "\n"
-      terrain = terrains[t[0]]
-      ui.draw_terrain(yoffset + (index/width).round(0), xoffset + (index % width), terrain.glyph, t[1], terrain.color, terrain.bold)
-      index += t[1]
-    end
-  end
-
-  private
-
-  attr_reader :ui, :terrains
-end
-
-
+# TO STRUCT
 class MessageBox
-  def initialize ui, yoffset, xoffset, width=40, height=20
-    @ui = ui
+  def initialize yoffset, xoffset, width=40, height=20
     @width = width
     @height = height
     @yoffset = yoffset
     @xoffset = xoffset
   end
 
-  def render
-    ui.message(yoffset, xoffset+2, 'MESSAGES')
-    ui.rectangle(yoffset+1, xoffset, width, height)
-  end
-
-  attr_reader :width, :height
-
-  private
-
-  attr_reader :ui, :yoffset, :xoffset
+  attr_reader :width, :height, :yoffset, :xoffset
 end
