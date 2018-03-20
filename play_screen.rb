@@ -36,7 +36,7 @@ class MainScreen
   end
 
   def render_msg_box
-    ui.message(screen_layout.msg_box.yoffset, screen_layout.msg_box.xoffset+2, 'MESSAGES')
+    ui.msg(screen_layout.msg_box.yoffset, screen_layout.msg_box.xoffset+2, 'MESSAGES')
     ui.rectangle(screen_layout.msg_box.yoffset+1, screen_layout.msg_box.xoffset, screen_layout.msg_box.width, screen_layout.msg_box.height)
   end
 

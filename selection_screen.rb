@@ -33,8 +33,8 @@ class SelectionScreen
 
   def render_screen
     ui.clear
-    ui.message(0, 0, messages[:choosing])
-    ui.message(0, right_offset, instructions)
+    ui.msg(0, 0, messages[:choosing])
+    ui.msg(0, right_offset, instructions)
     render_choices
     handle_choice(prompt)
   end
@@ -53,11 +53,11 @@ class SelectionScreen
 
   def render_choices
     items.each_with_index do |item, index|
-      ui.message(index + 2, right_offset, "#{item.hotkey} - #{item}")
+      ui.msg(index + 2, right_offset, "#{item.hotkey} - #{item}")
     end
 
-    ui.message(items.length + 2, right_offset, '* - Random')
-    ui.message(items.length + 3, right_offset, 'q - Quit')
+    ui.msg(items.length + 2, right_offset, '* - Random')
+    ui.msg(items.length + 3, right_offset, 'q - Quit')
   end
 
   def handle_choice choice

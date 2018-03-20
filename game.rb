@@ -12,30 +12,30 @@ class Game
 
   def run
     title_screen
-    setup_character
-#    character_screen
+#    setup_character
+# #    character_screen
 
-    play_screen = MainScreen.new(ui, options)
-    play_screen.render
-    play_screen.render_map
-    play_screen.render_player
-    while (ch = ui.user_input)
-      if (258..261).include?(ch)
-        play_screen.render_tile(options[:player].coordinates.y, options[:player].coordinates.x)
-        case ch
-        when 258
-          options[:player].coordinates.y += 1 if not options[:player].coordinates.y + 1 >= options[:current_map].height and options[:current_map].terrain_info(options[:player].coordinates.y + 1, options[:player].coordinates.x).walkable
-        when 259
-          options[:player].coordinates.y -= 1 if not options[:player].coordinates.y - 1 < 0 and options[:current_map].terrain_info(options[:player].coordinates.y - 1, options[:player].coordinates.x).walkable
-        when 260
-          options[:player].coordinates.x -= 1 if not options[:player].coordinates.x - 1 < 0 and options[:current_map].terrain_info(options[:player].coordinates.y, options[:player].coordinates.x - 1).walkable
-        when 261
-          options[:player].coordinates.x += 1 if not options[:player].coordinates.x + 1 >= options[:current_map].width and options[:current_map].terrain_info(options[:player].coordinates.y, options[:player].coordinates.x + 1).walkable
-        end
-        play_screen.render_player
-      end
-    end
-#    ui.standby
+#     game_screen = MainLayout.new(ui)
+#     game_screen.render
+    # play_screen.render_map
+    # play_screen.render_player
+    # while (ch = ui.user_input)
+    #   if (258..261).include?(ch)
+    #     play_screen.render_tile(options[:player].coordinates.y, options[:player].coordinates.x)
+    #     case ch
+    #     when 258
+    #       options[:player].coordinates.y += 1 if not options[:player].coordinates.y + 1 >= options[:current_map].height and options[:current_map].terrain_info(options[:player].coordinates.y + 1, options[:player].coordinates.x).walkable
+    #     when 259
+    #       options[:player].coordinates.y -= 1 if not options[:player].coordinates.y - 1 < 0 and options[:current_map].terrain_info(options[:player].coordinates.y - 1, options[:player].coordinates.x).walkable
+    #     when 260
+    #       options[:player].coordinates.x -= 1 if not options[:player].coordinates.x - 1 < 0 and options[:current_map].terrain_info(options[:player].coordinates.y, options[:player].coordinates.x - 1).walkable
+    #     when 261
+    #       options[:player].coordinates.x += 1 if not options[:player].coordinates.x + 1 >= options[:current_map].width and options[:current_map].terrain_info(options[:player].coordinates.y, options[:player].coordinates.x + 1).walkable
+    #     end
+    #     play_screen.render_player
+    #   end
+    # end
+    exit
   end
 
   private
@@ -54,9 +54,8 @@ class Game
   end
 
   def setup_character
-    get_traits
-#    select_item
-    options[:player] = make_player
+   get_traits
+   options[:player] = make_player
   end
 
   def get_traits
