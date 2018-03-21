@@ -11,11 +11,11 @@ YX = Struct.new(:y, :x) do
     return YX.new(self.y + yx[0], self.x + yx[1])
   end
 
-  # def add! yx
-  #   self.y += yx[0]
-  #   self.x += yx[1]
-  #   return self
-  # end
+  def add! yx
+    self.y += yx[0]
+    self.x += yx[1]
+    return self
+  end
 
   def left n=1 ; YX.new(self.y, self.x - n) ; end
   def right n=1 ; YX.new(self.y, self.x + n) ; end

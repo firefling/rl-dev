@@ -33,6 +33,11 @@ class MainLayout
     map.render(map_box.width, map_box.height, map_obj_offset)
   end
 
+  def render_tile
+    tile = map.terrain_info(options[:player].coordinates)
+    ui.draw_map_obj(options[:player].coordinates + map_obj_offset, tile.glyph, tile.color, tile.bold)
+  end
+
   def render_player
     player.render(map_obj_offset)
   end

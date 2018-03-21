@@ -21,13 +21,16 @@ class Map
     return self
   end
 
-  def get_tile y, x
-    layout[y * (width + 1) + x]
+  def get_tile yx
+    layout[yx.y * (width + 1) + yx.x]
   end
 
-  def terrain_info y, x
-    terrains = Terrains.new
-    terrains[get_tile(y, x)]
+  def terrain_info yx
+    terrains[get_tile(yx)]
+  end
+
+  def outside? coords
+    return (coords.y >= height or coords.y < 0 or coords.x >= width or coords.x < 0)
   end
 
   def path

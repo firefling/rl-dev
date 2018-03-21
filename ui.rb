@@ -35,7 +35,7 @@ class UI
 #    curs_set(0)
   end
 
-  def draw_player yx, glyph, color=16, bold=false
+  def draw_map_obj yx, glyph, color=16, bold=false
     win.attron(color_pair(color)|(bold ? A_BOLD : A_NORMAL)){
       msg(yx, glyph)
     }

@@ -10,7 +10,7 @@ class Display
 
   def render
     case options[:gamestate]
-    when :playscreen
+    when :mainscreen
       render_mainscreen
     when :charscreen
       render_charscreen
@@ -20,6 +20,14 @@ class Display
   def render_mainscreen
     mainscreen.render
     mainscreen.render_map
+    mainscreen.render_player
+  end
+
+  def render_tile
+    mainscreen.render_tile
+  end
+
+  def render_player
     mainscreen.render_player
   end
 

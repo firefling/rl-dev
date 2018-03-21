@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 class Player
-  attr_reader :ui, :role, :race, :gender, :alignment, :attributes, :hitpoints, :max_hitpoints, :power, :max_power, :coordinates, :glyph, :color, :bold
+  attr_reader :ui, :role, :race, :gender, :alignment, :attributes, :hitpoints, :max_hitpoints, :power, :max_power, :glyph, :color, :bold, :coordinates
 
   def initialize ui, options
     @ui = ui
@@ -24,20 +24,15 @@ class Player
   end
 
   def render offset
-    ui.draw_player(coordinates + offset, glyph, color, bold)
+    ui.draw_map_obj(coordinates + offset, glyph, color, bold)
   end
 
+  def move yx
+    coordinates.add!(yx)
+  end
+
+  private
+
+  attr_writer :coordinates
+
 end
-
-# class PlayerDisplay
-
-#   def initialize ui
-#     @ui = ui
-#   end
-
-#   attr_reader :ui, :glyph, :color, :bold
-
-#   def render y, x, yoffset=0, xoffset=0
-#     ui.draw_player(y + yoffset, x + xoffset, glyph, color, bold)
-#   end
-# end

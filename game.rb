@@ -2,59 +2,84 @@
 
 class Game
 
-  STATES = [:dead, :playscreen, :eqscreen, :charscreen]
+  STATES = [:dead, :mainscreen, :eqscreen, :charscreen]
 
   def initialize
     @ui = UI.new
-    @options = { quit: false, randall: false, initial_y: 22, initial_x: 1 }
     @maps = Maps.new
+    @options = { quit: false, randall: false, initial_y: 22, initial_x: 1 }
     @options[:initial_map] = 'world'
     @options[:current_map] = maps[options[:initial_map]].load(ui)
-    @options[:gamestate] = :playscreen
+    @options[:gamestate] = :mainscreen
+
     @display = Display.new(ui, options)
+    @uicontrol = UserInputController.new(options)
+
     at_exit { ui.close; pp options } # runs at program exit
   end
 
   def run
+
     title_screen
     setup_character
+
     display.render_mainscreen
 
     while (ch = ui.user_input)
-      case get_gamestate
-      when :playscreen
-        set_gamestate(:charscreen) if ch == 'c'
-      when :charscreen
-        set_gamestate(:playscreen) if ch == 'm'
-      else
+      action = uicontrol.get_action(ch)
+      if STATES.include?(action)
+        set_gamestate(action)
+        display.render
+        next
       end
-      display.render
+      case get_gamestate
+      when :mainscreen
+        action_in_mainscreen(action)
+      when :charscreen
+        action_in_charscreen(action)
+      end
     end
-    # play_screen.render_map
-    # play_screen.render_player
-    # while (ch = ui.user_input)
-    #   if (258..261).include?(ch)
-    #     play_screen.render_tile(options[:player].coordinates.y, options[:player].coordinates.x)
-    #     case ch
-    #     when 258
-    #       options[:player].coordinates.y += 1 if not options[:player].coordinates.y + 1 >= options[:current_map].height and options[:current_map].terrain_info(options[:player].coordinates.y + 1, options[:player].coordinates.x).walkable
-    #     when 259
-    #       options[:player].coordinates.y -= 1 if not options[:player].coordinates.y - 1 < 0 and options[:current_map].terrain_info(options[:player].coordinates.y - 1, options[:player].coordinates.x).walkable
-    #     when 260
-    #       options[:player].coordinates.x -= 1 if not options[:player].coordinates.x - 1 < 0 and options[:current_map].terrain_info(options[:player].coordinates.y, options[:player].coordinates.x - 1).walkable
-    #     when 261
-    #       options[:player].coordinates.x += 1 if not options[:player].coordinates.x + 1 >= options[:current_map].width and options[:current_map].terrain_info(options[:player].coordinates.y, options[:player].coordinates.x + 1).walkable
-    #     end
-    #     play_screen.render_player
-    #   end
-    # end
+
   end
 
   private
 
   TRAITS = [Role, Race, Gender, Alignment]
 
-  attr_reader :ui, :options, :maps, :display
+  attr_reader :ui, :options, :maps, :display, :uicontrol
+
+  DIRECTIONS = {
+    up: [-1,0],
+    down: [1,0],
+    left: [0,-1],
+    right: [0,1]
+  }
+
+  def action_in_mainscreen action
+    case action
+    when :up, :down, :left, :right
+      new_yx = player.coordinates.add(DIRECTIONS[action])
+      unless map.outside?(new_yx) or not map.terrain_info(new_yx).walkable
+        display.render_tile
+        player.move(DIRECTIONS[action])
+        display.render_player
+      end
+    when :quit
+      options[:quit] = true
+      quit?
+    end
+  end
+
+  def action_in_charscreen action
+  end
+
+  def player
+    options[:player]
+  end
+
+  def map
+    options[:current_map]
+  end
 
   def get_gamestate
     options[:gamestate]
