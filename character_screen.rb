@@ -7,15 +7,16 @@ class CharacterScreen
   end
 
   def render
+    yx = YX.new(2, 25)
     ui.clear
-    ui.message(2, 25, 'PLAYER CHARACTER')
+    ui.msg(yx, 'PLAYER CHARACTER')
     ui.print_table({gender:  @options[:player].gender.name,
                      race: @options[:player].race.name,
                      class: @options[:player].role.name,
-                     alignment:  @options[:player].alignment.name}, 5, 10, :left, 2)
-    ui.message(13, 10, 'Attributes:')
-    ui.print_table(@options[:player].attributes, 15, 13, :right, 2)
-    ui.standby
+                     alignment:  @options[:player].alignment.name}, yx += [3,-15], :left, 2) # 5, 10
+    ui.msg(yx += [8,0], 'Attributes:') # YX.new(13, 10)
+    ui.print_table(@options[:player].attributes, yx += [2,3], :right, 2) # 15, 13
+    ui.user_input
   end
 
   private

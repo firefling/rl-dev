@@ -3,20 +3,24 @@
 class Game
   def initialize
     @ui = UI.new
-    @options = { quit: false, randall: false, initial_x: 0, initial_y: 0 }
+    @options = { quit: false, randall: false, initial_y: 22, initial_x: 1 }
     @maps = Maps.new
     @options[:initial_map] = 'world'
-    @options[:current_map] = maps[options[:initial_map]].load
+    @options[:current_map] = maps[options[:initial_map]].load(ui)
     at_exit { ui.close; pp options } # runs at program exit
   end
 
   def run
     title_screen
-#    setup_character
-# #    character_screen
+    setup_character
+    character_screen
 
-#     game_screen = MainLayout.new(ui)
-#     game_screen.render
+    game_screen = MainLayout.new(ui, options)
+    game_screen.render
+    game_screen.render_map
+    game_screen.render_player
+
+    ui.user_input
     # play_screen.render_map
     # play_screen.render_player
     # while (ch = ui.user_input)
@@ -35,14 +39,21 @@ class Game
     #     play_screen.render_player
     #   end
     # end
-    exit
   end
 
   private
 
   TRAITS = [Role, Race, Gender, Alignment]
 
-  attr_reader :ui, :options, :play_screen, :player_controller, :maps
+  attr_reader :ui, :options, :maps
+
+  def player
+    options[:player]
+  end
+
+  def map
+    options[:current_map]
+  end
 
   def title_screen
     TitleScreen.new(ui, options).render
@@ -66,7 +77,7 @@ class Game
   end
 
   def make_player
-    Player.new(options).tap do
+    Player.new(ui, options).tap do
       %i(role race gender alignment).each{ |key| options.delete(key) }
     end
   end

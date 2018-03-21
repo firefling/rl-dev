@@ -23,46 +23,46 @@ class UI
     win.clear #super
   end
 
-  def msg coordinates, str
-    y = coordinates.y
-    x = coordinates.x
+  def msg yx, str
+    y = yx.y
+    x = yx.x
 
     x = x + cols if x < 0
     y = y + lines if y < 0
 
     win.setpos(y, x) # place the cursor at our position
     win.addstr(str) # prints a string at cursor position
-    curs_set(0)
+#    curs_set(0)
   end
 
-  def draw_player coordinates, glyph, color=16, bold=false
+  def draw_player yx, glyph, color=16, bold=false
     win.attron(color_pair(color)|(bold ? A_BOLD : A_NORMAL)){
-      msg(coordinates, glyph)
+      msg(yx, glyph)
     }
   end
 
-  def vertical coordinates, length, char='|'
+  def vertical yx, length, char='|'
     length.times do |i|
-      msg(coordinates.down(i), char)
+      msg(yx.down(i), char)
     end
   end
 
-  def horizontal coordinates, length, char='-'
+  def horizontal yx, length, char='-'
     length.times do |i|
-      msg(coordinates.right(i), char)
+      msg(yx.right(i), char)
     end
   end
 
-  def rectangle coordinates, width, height, color=8
+  def rectangle yx, width, height, color=8
     win.attron(color_pair(color)){
-      horizontal(coordinates, width + 2)
-      horizontal(coordinates.up(height + 1), width + 2)
-      vertical(coordinates.up, height)
-      vertical(coordinates + Coordinates.new(1, width + 1), height)
+      horizontal(yx, width + 2)
+      horizontal(yx.down(height + 1), width + 2)
+      vertical(yx.down, height)
+      vertical(yx + YX.new(1, width + 1), height)
     }
   end
 
-  def print_table hash, coordinates, just=:none, interline=1, separator=':'
+  def print_table hash, yx, just=:none, interline=1, separator=':'
     line = 0
     for key, value in hash
       left_indent = 0
@@ -76,14 +76,14 @@ class UI
       when :left
         centre_indent = 1 + hash.keys.longest.to_s.length - key.to_s.length
       end
-      msg(coordinates + Coordinates.new(line, left_indent),
+      msg(yx + YX.new(line, left_indent),
               key.to_s.capitalize + separator + ' '*centre_indent + value.to_s)
       line += interline
     end
   end
 
-  def choice_prompt coordinates, string, choices
-    msg(coordinates, string + " ")
+  def choice_prompt yx, string, choices
+    msg(yx, string + " ")
 
     loop do
       choice = win.getch
@@ -91,10 +91,10 @@ class UI
     end
   end
 
-  def draw_terrain coordinates, symbol, n=1, color=8, bold=false
+  def draw_terrain yx, symbol, n=1, color=8, bold=false
     # color = Object.const_get('Curses::'+c)
     win.attron(color_pair(color)|(bold ? A_BOLD : A_NORMAL)){
-      msg(coordinates, symbol*n)
+      msg(yx, symbol*n)
     }
   end
 
@@ -106,9 +106,5 @@ class UI
     colors.times do |i|
       init_pair(i + 1, i, -1)
     end
-  end
-
-  def standby
-    win.getch
   end
 end

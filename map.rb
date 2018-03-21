@@ -12,10 +12,12 @@ class Map
     ## string.sub!(/^1/, '')
   end
 
-  def load
+  def load ui
+    @ui = ui
     @layout = File.read(path)
     @width = layout.index("\n")
     @height = layout.count("\n")
+    @terrains = Terrains.new
     return self
   end
 
@@ -32,7 +34,35 @@ class Map
     MAP_PATH + file
   end
 
-  attr_reader :name, :file, :layout, :width, :height
+  attr_reader :ui, :name, :file, :layout, :width, :height, :terrains
+
+  def render box_width, box_height, offset
+    err 'Cannot render map. Layout not loaded.' unless layout
+
+    yoffset = offset.y
+    xoffset = offset.x
+
+    # this information is already included in the Map object (should be passed as arguments)
+    if layout.include?("\n")
+      width = layout.index("\n")
+      height = layout.count("\n")
+    else
+      width = layout.size
+      height = 1
+    end
+
+    # centre map if needed
+    yoffset += (box_height - height) / 2 if height < box_height and height > 1
+    xoffset += (box_width - width) / 2 if width < box_width and width > 1
+
+    index = 0
+    for t in layout.scan(/((.)\2*)/).map{ |m| [m[1], m[0].length] } #.each_with_index do |t, i|
+      next if t[0] == "\n"
+      terrain = terrains[t[0]]
+      ui.draw_terrain(YX.new(yoffset + (index/width).round(0), xoffset + (index % width)), terrain.glyph, t[1], terrain.color, terrain.bold)
+      index += t[1]
+    end
+  end
 
 end
 

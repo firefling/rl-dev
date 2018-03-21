@@ -2,28 +2,30 @@ def err str
   $stderr.puts str or exit(-1)
 end
 
-Coordinates = Struct.new(:y, :x) do
-  def + coordinates
-    self.offset(coordinates)
+YX = Struct.new(:y, :x) do
+  def + yx
+    return self.add([yx[0], yx[1]])
   end
 
-  def - coordinates
-    Coordinates.new(self.y - coordinates.y, self.x - coordinates.x)
+  def add yx
+    return YX.new(self.y + yx[0], self.x + yx[1])
   end
 
-  def offset coordinates
-    Coordinates.new(self.y + coordinates.y, self.x + coordinates.x)
-  end
+  # def add! yx
+  #   self.y += yx[0]
+  #   self.x += yx[1]
+  #   return self
+  # end
 
-  def left n=1 ; Coordinates.new(self.y, self.x - n) ; end
-  def right n=1 ; Coordinates.new(self.y, self.x + n) ; end
-  def up n=1 ; Coordinates.new(self.y - n, self.x) ; end
-  def down n=1 ; Coordinates.new(self.y + n, self.x) ; end
+  def left n=1 ; YX.new(self.y, self.x - n) ; end
+  def right n=1 ; YX.new(self.y, self.x + n) ; end
+  def up n=1 ; YX.new(self.y - n, self.x) ; end
+  def down n=1 ; YX.new(self.y + n, self.x) ; end
 
-  def left! n=1 ; self.x -= n ; end
-  def right! n=1 ; self.x += n ; end
-  def up! n=1 ; self.y -= n ; end
-  def down! n=1 ; self.y += n ; end
+  def left! n=1 ; self.x -= n ; self ; end
+  def right! n=1 ; self.x += n ; self ; end
+  def up! n=1 ; self.y -= n ; self ; end
+  def down! n=1 ; self.y += n ; self ; end
 end
 
 class Array

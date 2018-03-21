@@ -8,8 +8,8 @@ class TitleScreen
   end
 
   def render
-    ui.msg(Coordinates.new(0, 0), messages[:name])
-    ui.msg(Coordinates.new(1, 7), messages[:by])
+    ui.msg(YX.new(0, 0), messages[:name])
+    ui.msg(YX.new(1, 7), messages[:by])
     handle_choice(prompt)
   end
 
@@ -18,7 +18,7 @@ class TitleScreen
   attr_reader :ui, :options, :messages
 
   def prompt
-    ui.choice_prompt(Coordinates.new(3, 0), messages[:pick_random], "ynq")
+    ui.choice_prompt(YX.new(3, 0), messages[:pick_random], "ynq")
   end
 
   def handle_choice choice
