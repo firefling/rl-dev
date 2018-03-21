@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-# TO STRUCT
 class MainLayout
   def initialize ui, options
     @ui = ui

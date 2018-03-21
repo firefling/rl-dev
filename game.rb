@@ -1,26 +1,35 @@
 #!/usr/bin/env ruby
 
 class Game
+
+  STATES = [:dead, :playscreen, :eqscreen, :charscreen]
+
   def initialize
     @ui = UI.new
     @options = { quit: false, randall: false, initial_y: 22, initial_x: 1 }
     @maps = Maps.new
     @options[:initial_map] = 'world'
     @options[:current_map] = maps[options[:initial_map]].load(ui)
+    @options[:gamestate] = :playscreen
+    @display = Display.new(ui, options)
     at_exit { ui.close; pp options } # runs at program exit
   end
 
   def run
     title_screen
     setup_character
-    character_screen
+    display.render_mainscreen
 
-    game_screen = MainLayout.new(ui, options)
-    game_screen.render
-    game_screen.render_map
-    game_screen.render_player
-
-    ui.user_input
+    while (ch = ui.user_input)
+      case get_gamestate
+      when :playscreen
+        set_gamestate(:charscreen) if ch == 'c'
+      when :charscreen
+        set_gamestate(:playscreen) if ch == 'm'
+      else
+      end
+      display.render
+    end
     # play_screen.render_map
     # play_screen.render_player
     # while (ch = ui.user_input)
@@ -45,14 +54,14 @@ class Game
 
   TRAITS = [Role, Race, Gender, Alignment]
 
-  attr_reader :ui, :options, :maps
+  attr_reader :ui, :options, :maps, :display
 
-  def player
-    options[:player]
+  def get_gamestate
+    options[:gamestate]
   end
 
-  def map
-    options[:current_map]
+  def set_gamestate state
+    options[:gamestate] = state
   end
 
   def title_screen

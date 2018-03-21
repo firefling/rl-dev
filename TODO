@@ -1,0 +1,1 @@
+1) ui and options should always be private attr_readers
