@@ -21,14 +21,20 @@ class Display
     mainscreen.render
     mainscreen.render_map
     mainscreen.render_player
+    mainscreen.render_monsters
+#    ui.hide_cursor
   end
 
-  def render_tile
-    mainscreen.render_tile
+  def render_tile coordinates
+    mainscreen.render_tile(coordinates)
   end
 
   def render_player
     mainscreen.render_player
+  end
+
+  def render_monsters
+    mainscreen.render_monsters
   end
 
   def render_charscreen

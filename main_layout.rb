@@ -33,13 +33,23 @@ class MainLayout
     map.render(map_box.width, map_box.height, map_obj_offset)
   end
 
-  def render_tile
-    tile = map.terrain_info(options[:player].coordinates)
-    ui.draw_map_obj(options[:player].coordinates + map_obj_offset, tile.glyph, tile.color, tile.bold)
+  def render_tile coordinates
+    tile = map.terrain_info(coordinates)
+    ui.draw_map_obj(coordinates + map_obj_offset, tile.glyph, tile.color, tile.bold)
   end
 
   def render_player
     player.render(map_obj_offset)
+  end
+
+  def render_monsters
+    for m in monsters
+      m.render(ui, map_obj_offset)
+    end
+  end
+
+  def set_cursor_to_player_position
+    ui.set_cursor(options[:player].coordinates + map_obj_offset)
   end
 
   private
@@ -48,6 +58,10 @@ class MainLayout
 
   def player
     options[:player]
+  end
+
+  def monsters
+    options[:monsters]
   end
 
   def map

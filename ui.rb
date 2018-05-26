@@ -13,6 +13,7 @@ class UI
     start_color
     use_default_colors
     initialize_colors
+#   curs_set(0)
   end
 
   def close
@@ -33,6 +34,17 @@ class UI
     win.setpos(y, x) # place the cursor at our position
     win.addstr(str) # prints a string at cursor position
 #    curs_set(0)
+  end
+
+  def hide_cursor
+    curs_set(0)
+  end
+
+  def set_cursor yx
+    y = yx.y
+    x = yx.x
+
+    win.setpos(y, x)
   end
 
   def draw_map_obj yx, glyph, color=16, bold=false

@@ -10,6 +10,7 @@ class Game
     @options = { quit: false, randall: false, initial_y: 22, initial_x: 1 }
     @options[:initial_map] = 'world'
     @options[:current_map] = maps[options[:initial_map]].load(ui)
+    @options[:monsters] = Array.new
     @options[:gamestate] = :mainscreen
 
     @display = Display.new(ui, options)
@@ -23,6 +24,7 @@ class Game
     title_screen
     setup_character
 
+    load_map(options[:initial_map])
     display.render_mainscreen
 
     while (ch = ui.user_input)
@@ -35,6 +37,7 @@ class Game
       case get_gamestate
       when :mainscreen
         action_in_mainscreen(action)
+        move_monsters
       when :charscreen
         action_in_charscreen(action)
       end
@@ -59,8 +62,9 @@ class Game
     case action
     when :up, :down, :left, :right
       new_yx = player.coordinates.add(DIRECTIONS[action])
-      unless map.outside?(new_yx) or not map.terrain_info(new_yx).walkable
-        display.render_tile
+#      unless map.outside?(new_yx) or not map.terrain_info(new_yx).walkable
+      if map.can_move?(player.coordinates, action)
+        display.render_tile(player.coordinates)
         player.move(DIRECTIONS[action])
         display.render_player
       end
@@ -71,6 +75,30 @@ class Game
   end
 
   def action_in_charscreen action
+  end
+
+  def load_map map
+    @options[:current_map] = maps[map].load(ui)
+    generate_monsters
+  end
+
+  def generate_monsters
+    for m in Monster.all
+      @options[:monsters] << m
+      m.set_coordinates(YX.new(rand(map.height), rand(map.width)))
+    end
+  end
+
+  def move_monsters
+    for m in @options[:monsters]
+      direction = DIRECTIONS.keys.sample
+      if map.can_move?(m.coordinates, direction)
+        display.render_tile(m.coordinates)
+        m.move(DIRECTIONS[direction])
+      end
+      display.render_monsters
+    end
+    display.render_monsters
   end
 
   def player

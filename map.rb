@@ -17,11 +17,30 @@ class Map
     @layout = File.read(path)
     @width = layout.index("\n")
     @height = layout.count("\n")
-    @terrains = Terrains.new
+    @terrains = {}
+    for t in Terrain.all
+      @terrains[t.symbol] = t
+    end
+    @walkable_tiles = terrains.values.select{ |t| t.walkable }.map{ |t| t.symbol }
     return self
   end
 
+  def can_move? yx, direction
+    case direction
+    when :left
+      return walkable_tiles.include?(get_tile(yx.left))
+    when :right
+      return walkable_tiles.include?(get_tile(yx.right))
+    when :up
+      return walkable_tiles.include?(get_tile(yx.up))
+    when :down
+      return walkable_tiles.include?(get_tile(yx.down))
+    end
+    return false
+  end
+
   def get_tile yx
+#    return nil if outside?(yx)
     layout[yx.y * (width + 1) + yx.x]
   end
 
@@ -37,7 +56,7 @@ class Map
     MAP_PATH + file
   end
 
-  attr_reader :ui, :name, :file, :layout, :width, :height, :terrains
+  attr_reader :ui, :name, :file, :layout, :width, :height, :terrains, :walkable_tiles
 
   def render box_width, box_height, offset
     err 'Cannot render map. Layout not loaded.' unless layout
@@ -62,6 +81,7 @@ class Map
     for t in layout.scan(/((.)\2*)/).map{ |m| [m[1], m[0].length] } #.each_with_index do |t, i|
       next if t[0] == "\n"
       terrain = terrains[t[0]]
+#      terrain = terrains.find{ |t| t.symbol == t[0] }
       ui.draw_terrain(YX.new(yoffset + (index/width).round(0), xoffset + (index % width)), terrain.glyph, t[1], terrain.color, terrain.bold)
       index += t[1]
     end

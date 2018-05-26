@@ -2,6 +2,16 @@
 
 class Terrain
 
+  # def self.for_options _
+  #   all
+  # end
+
+  def self.all
+    DataLoader.load_file('terrains').map do |data|
+      new(data)
+    end
+  end
+
   attr_reader :name, :glyph, :symbol, :color, :bold, :walkable
 
   def initialize data
@@ -11,20 +21,22 @@ class Terrain
   end
 end
 
-class Terrains
+# class Terrains
 
-  def [] char
-    @list.find{ |t| t.symbol == char }
-  end
+#   def [] char
+#     @list.find{ |t| t.symbol == char }
+#   end
 
-  def initialize
-    @list = DataLoader.load_file('terrains').map do |data|
-      Terrain.new(data)
-    end
-  end
+  
 
-  private
+#   def initialize
+#     @list = DataLoader.load_file('terrains').map do |data|
+#       Terrain.new(data)
+#     end
+#   end
 
-  attr_reader :list
+#   private
 
-end
+#   attr_reader :list
+
+# end

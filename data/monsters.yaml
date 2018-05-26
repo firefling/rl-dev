@@ -1,0 +1,17 @@
+---
+- name: Skeleton Warrior
+  max_hp: 6
+  hp: 6
+  strength: 10
+  weapon: 0
+  color: 123
+  glyph: s
+  level: 1
+- name: Strong Skeleton Warrior
+  max_hp: 9
+  hp: 9
+  strength: 12
+  weapon: 0
+  color: 123
+  glyph: S
+  level: 2

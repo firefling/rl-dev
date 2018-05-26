@@ -4,7 +4,8 @@ class UserInputController
   def initialize options
     @options = options
     @charscreen_actions = {
-      'm' => :mainscreen
+      'm' => :mainscreen,
+      'q' => :mainscreen
     }
     @mainscreen_actions = {
       'c' => :charscreen,
