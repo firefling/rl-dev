@@ -47,6 +47,17 @@ class Monster
     coordinates.add!(yx)
   end
 
+  def get_dir_to_follow yx
+    dist_y = coordinates.y - yx.y
+    dist_x = coordinates.x - yx.x
+    if dist_y.abs > dist_x.abs
+      direction = (dist_y > 0 ? :up : :down)
+    else
+      direction = (dist_x > 0 ? :left : :right)
+    end
+    direction
+  end
+
   def render ui, offset
     ui.draw_map_obj(coordinates + offset, glyph, color, bold)
   end

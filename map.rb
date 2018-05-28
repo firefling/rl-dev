@@ -28,15 +28,15 @@ class Map
   def can_move? yx, direction
     case direction
     when :left
-      return walkable_tiles.include?(get_tile(yx.left))
+      return yx.left if walkable_tiles.include?(get_tile(yx.left))
     when :right
-      return walkable_tiles.include?(get_tile(yx.right))
+      return yx.right if walkable_tiles.include?(get_tile(yx.right))
     when :up
-      return walkable_tiles.include?(get_tile(yx.up))
+      return yx.up if walkable_tiles.include?(get_tile(yx.up))
     when :down
-      return walkable_tiles.include?(get_tile(yx.down))
+      return yx.down if walkable_tiles.include?(get_tile(yx.down))
     end
-    return false
+    return nil
   end
 
   def get_tile yx
@@ -56,7 +56,7 @@ class Map
     MAP_PATH + file
   end
 
-  attr_reader :ui, :name, :file, :layout, :width, :height, :terrains, :walkable_tiles
+  attr_reader :ui, :name, :file, :layout, :width, :height, :terrains, :walkable_tiles, :walkable_indices
 
   def render box_width, box_height, offset
     err 'Cannot render map. Layout not loaded.' unless layout
@@ -85,6 +85,14 @@ class Map
       ui.draw_terrain(YX.new(yoffset + (index/width).round(0), xoffset + (index % width)), terrain.glyph, t[1], terrain.color, terrain.bold)
       index += t[1]
     end
+  end
+
+  def i_to_yx i
+    YX.new(i/width, i%width)
+  end
+
+  def yx_to_i yx
+    yx.y * width + yx.x
   end
 
 end

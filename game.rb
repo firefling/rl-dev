@@ -12,6 +12,7 @@ class Game
     @options[:current_map] = maps[options[:initial_map]].load(ui)
     @options[:monsters] = Array.new
     @options[:gamestate] = :mainscreen
+    @options[:walkable_indices] = map.layout.chars.map.with_index{ |t, i| (map.walkable_tiles.include?(t) ? i : nil) }.compact
 
     @display = Display.new(ui, options)
     @uicontrol = UserInputController.new(options)
@@ -51,19 +52,16 @@ class Game
 
   attr_reader :ui, :options, :maps, :display, :uicontrol
 
-  DIRECTIONS = {
-    up: [-1,0],
-    down: [1,0],
-    left: [0,-1],
-    right: [0,1]
-  }
-
   def action_in_mainscreen action
     case action
     when :up, :down, :left, :right
-      new_yx = player.coordinates.add(DIRECTIONS[action])
+#      new_yx = player.coordinates.add(DIRECTIONS[action])
 #      unless map.outside?(new_yx) or not map.terrain_info(new_yx).walkable
-      if map.can_move?(player.coordinates, action)
+      #if monster - attack
+      #if npc - talk (on arrows or other keys?)
+      #if object - interact (on arrows or other keys?)
+      #otherwise - move
+      if map.can_move?(player.coordinates, action) and not @options[:monsters][map.yx_to_i(player.coordinates + DIRECTIONS[action])]
         display.render_tile(player.coordinates)
         player.move(DIRECTIONS[action])
         display.render_player
@@ -84,19 +82,23 @@ class Game
 
   def generate_monsters
     for m in Monster.all
-      @options[:monsters] << m
-      m.set_coordinates(YX.new(rand(map.height), rand(map.width)))
+      random_i = @options[:walkable_indices].sample
+      m.set_coordinates(map.i_to_yx(random_i))
+      @options[:monsters][random_i] = m
     end
   end
 
   def move_monsters
-    for m in @options[:monsters]
+    for m in @options[:monsters].compact
+      @options[:monsters][map.yx_to_i(m.coordinates)] = nil
+      display.render_tile(m.coordinates)
       direction = DIRECTIONS.keys.sample
-      if map.can_move?(m.coordinates, direction)
-        display.render_tile(m.coordinates)
-        m.move(DIRECTIONS[direction])
+      direction = m.get_dir_to_follow(player.coordinates) if m.coordinates.dist(player.coordinates) <= 4
+      new_yx = m.coordinates + DIRECTIONS[direction]
+      if map.can_move?(m.coordinates, direction) and not @options[:monsters][map.yx_to_i(new_yx)] and not new_yx == player.coordinates # what if cannot move? should go in a different direction
+          m.move(DIRECTIONS[direction])
       end
-      display.render_monsters
+      @options[:monsters][map.yx_to_i(m.coordinates)] = m
     end
     display.render_monsters
   end

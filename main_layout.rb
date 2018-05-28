@@ -43,7 +43,7 @@ class MainLayout
   end
 
   def render_monsters
-    for m in monsters
+    for m in monsters.compact
       m.render(ui, map_obj_offset)
     end
   end

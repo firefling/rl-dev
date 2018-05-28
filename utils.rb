@@ -17,6 +17,10 @@ YX = Struct.new(:y, :x) do
     return self
   end
 
+  def dist yx
+    return (self.y - yx.y).abs + (self.x - yx.x).abs
+  end
+
   def left n=1 ; YX.new(self.y, self.x - n) ; end
   def right n=1 ; YX.new(self.y, self.x + n) ; end
   def up n=1 ; YX.new(self.y - n, self.x) ; end
@@ -33,3 +37,10 @@ class Array
     sort_by{ |e| e.to_s.length }.last
   end
 end
+
+DIRECTIONS = {
+  up: [-1,0],
+  down: [1,0],
+  left: [0,-1],
+  right: [0,1]
+}
